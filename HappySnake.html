@@ -75,6 +75,7 @@
     }());
     //自调用函数---小蛇
     (function(){
+        var elements = [];
         //小蛇的构造函数
         function Snake(width,height,direction){
             //小蛇的每个部分的宽
@@ -90,18 +91,41 @@
             //方向
             this.direction = direction ||"right";
         }
+        //为原型添加方法--小蛇初始化的方法
         Snake.prototype.init =function(map){
+            //循环遍历创建div
             for(var i=0;i<this.body.length;i++){
+               //数组中的每个数组元素都是一个对象
+                var obj = this.body[i];
+                //创建div
+              var div = document.createElement("div");
+              //把div加入到map地图
+              map.appendChild(div);
+              //设置div的样式
+              div.style.position = "absolute";
+              div.style.width = this.width +"px";
+              div.style.height = this.height +"px";
+              div.style.left = obj.x*this.width+"px";
+              div.style.height = obj.y*this.height+"px";
+              div.style.background = obj.color;
 
+              //把div加入到elements数组中---目的是为了删除
+                elements.push(div);
             }
+
         }
+        //把Snake暴露给window，外部可以访问
+        window.Snake = Snake;
     }());
 
 
     //外部测试代码
     var fd = new Food();
+
     fd.init(document.querySelector(".map"));
-    console.log(fd.width);
+    // 创建小蛇
+    var  snake = new Snake();
+    snake.init(document.querySelector(".map"));
 </script>
 </body>
 </html>
